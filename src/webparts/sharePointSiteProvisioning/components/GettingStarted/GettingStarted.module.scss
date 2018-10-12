@@ -1,0 +1,67 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.GettingStarted{
+    width: 100%;
+    font-family: 'Roboto';
+    font-size: 1em;
+
+    .GetStartedLogo{
+        display: block;
+        font-weight: 400;
+        margin-top: 0.6em;
+    }
+
+    .Partition{
+        display: flex;
+        flex: 1;
+        flex-direction: row
+    }
+
+    .PartitionIcon{
+        font-size: 2.5em;
+    }
+
+    .PartitionMainContainer{
+        padding: 0px 0px 0px 15px;
+    }
+
+    .GettingStartedContainer{
+        display: flex;
+        font-size: 2em;
+
+        .DropDownStyling{
+            font-size: 1em;
+            color: rgb(0, 120, 212);
+            width: 250px;
+            margin-left: 4px;
+            margin-top: 3px;
+
+            span[class^="ms-Dropdown-title title_"]{
+                border: none;
+                border-bottom: 2px solid rgb(0, 120, 212);
+            }
+
+            span[class^="ms-Dropdown-caretDownWrapper caretDownWrapper_"]{
+                display: none;
+            }
+        }
+
+        .DropDownStylingOnChange{
+            font-size: 1em;
+            color: $ms-color-themePrimary;
+            width: auto;
+            margin-left: 4px;
+            margin-top: 3px;
+
+            span[class^="ms-Dropdown-title title_"]{
+                border: none;
+                border-bottom: 2px solid $ms-color-themePrimary;
+                padding: 0px;
+            }
+
+            span[class^="ms-Dropdown-caretDownWrapper caretDownWrapper_"]{
+                display: none;
+            }
+        }
+    }
+}

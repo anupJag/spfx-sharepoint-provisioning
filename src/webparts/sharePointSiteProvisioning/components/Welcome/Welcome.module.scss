@@ -1,0 +1,41 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.Welcome{
+    width: 100%;
+    text-align: center;
+    font-family: 'Roboto';
+    font-weight: 100;
+
+    .Title{
+        font-size: 4em;
+        font-weight: 200;
+        margin-bottom: 15px;
+    }
+
+    .SubTitle{
+        font-size: 2em;
+        font-weight: 200;
+        margin : 0px;
+    }
+
+    .Button{
+        padding: 1.75rem;
+        font-size: 1.3em;
+        border-radius: 2em;
+        margin-top: 20px;
+    }
+}
+
+// @media(min-width : 320px){
+//     .Title{
+//         font-size: 4em;
+//     }
+
+//     .SubTitle{
+//         font-size: 2em;
+//     }
+
+//     .Button{
+//         font-size: 1.3em;
+//     }
+// }
