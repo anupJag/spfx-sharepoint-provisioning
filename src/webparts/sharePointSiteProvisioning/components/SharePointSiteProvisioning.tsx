@@ -10,7 +10,13 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 export interface ISharePointSiteProvisioningState {
   getStartedClicked: boolean;
   gettingStartedClassState: boolean;
+  isBackButtonDisabled: boolean;
+  isForwardButtonDisabled: boolean;
+  currentPage: number;
 }
+
+const FIRST_PAGE: number = 0;
+const LAST_PAGE: number = 9;
 
 export default class SharePointSiteProvisioning extends React.Component<ISharePointSiteProvisioningProps, ISharePointSiteProvisioningState> {
 
@@ -21,7 +27,10 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
     super(props);
     this.state = {
       getStartedClicked: false,
-      gettingStartedClassState: false
+      gettingStartedClassState: false,
+      isBackButtonDisabled: true,
+      isForwardButtonDisabled: false,
+      currentPage: 0
     };
   }
 
@@ -35,18 +44,77 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
     });
   }
 
-  protected gettingStartedDropDownChangeHandler = (item : IDropdownOption) => {
+  /**
+   * Function to get what type of site needs to be created
+   */
+  protected gettingStartedDropDownChangeHandler = (item: IDropdownOption) => {
     this.setState({
-      gettingStartedClassState : true
+      gettingStartedClassState: true
     });
   }
 
+  protected isForwardButtonClicked = (): void => {
+    let currentPageInfo : number = this.state.currentPage;
+    let forwardButtonIsDisabled : boolean = this.state.isForwardButtonDisabled;
+    let backButtonIsDisabled : boolean = this.state.isBackButtonDisabled;
+    if (currentPageInfo <= LAST_PAGE) {
+      currentPageInfo++;
+    }
+
+    if(currentPageInfo == LAST_PAGE){
+      forwardButtonIsDisabled = true;
+    }
+    else{
+      forwardButtonIsDisabled = false;
+    }
+
+    if(currentPageInfo > FIRST_PAGE){
+      backButtonIsDisabled = false;
+    }
+
+    this.setState({
+      currentPage : currentPageInfo,
+      isForwardButtonDisabled : forwardButtonIsDisabled,
+      isBackButtonDisabled : backButtonIsDisabled
+    });
+  }
+
+  protected isBackButtonClicked = (): void => {
+    let currentPageInfo : number = this.state.currentPage;
+    let backButtonIsDisabled : boolean = this.state.isBackButtonDisabled;
+    let forwardButtonIsDisabled : boolean = this.state.isForwardButtonDisabled;
+
+    if (currentPageInfo > FIRST_PAGE) {
+      currentPageInfo--;
+    }
+
+    if(currentPageInfo == FIRST_PAGE){
+      backButtonIsDisabled = true;
+    }
+    else{
+      backButtonIsDisabled = false;
+    }
+
+    if(currentPageInfo < LAST_PAGE){
+      forwardButtonIsDisabled = false;
+    }
+
+    this.setState({
+      currentPage : currentPageInfo,
+      isBackButtonDisabled : backButtonIsDisabled,
+      isForwardButtonDisabled : forwardButtonIsDisabled,
+    });
+  }
 
   public render(): React.ReactElement<ISharePointSiteProvisioningProps> {
     let pageToBeRendered: JSX.Element | JSX.Element[] =
       <GettingStarted
         dropDownClassState={this.state.gettingStartedClassState}
         onDropDownChange={this.gettingStartedDropDownChangeHandler.bind(this)}
+        isBackDisabled={this.state.isBackButtonDisabled}
+        isForwardDisabled={this.state.isForwardButtonDisabled}
+        onForwadrdClicked={this.isForwardButtonClicked.bind(this)}
+        onBackClicked={this.isBackButtonClicked.bind(this)}
       />;
 
     return (

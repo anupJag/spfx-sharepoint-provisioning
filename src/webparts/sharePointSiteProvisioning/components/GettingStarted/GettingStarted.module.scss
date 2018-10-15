@@ -8,11 +8,14 @@
     .GetStartedLogo{
         display: block;
         font-weight: 400;
-        margin-top: 0.6em;
+        margin-top: 0.4em;
+        font-size: 1.2em;
+        text-transform: uppercase;
     }
 
     .Partition{
         display: flex;
+        margin: 10px 0px 100px 2px;
         flex: 1;
         flex-direction: row
     }
@@ -28,17 +31,18 @@
     .GettingStartedContainer{
         display: flex;
         font-size: 2em;
+        font-weight: bold;
+        margin-top: 2.5em;
 
         .DropDownStyling{
             font-size: 1em;
-            color: rgb(0, 120, 212);
             width: 250px;
-            margin-left: 4px;
+            margin-left: 10px;
             margin-top: 3px;
 
             span[class^="ms-Dropdown-title title_"]{
                 border: none;
-                border-bottom: 2px solid rgb(0, 120, 212);
+                border-bottom: 2px solid purple;
             }
 
             span[class^="ms-Dropdown-caretDownWrapper caretDownWrapper_"]{
@@ -48,14 +52,15 @@
 
         .DropDownStylingOnChange{
             font-size: 1em;
-            color: $ms-color-themePrimary;
+            color: purple;
+            font-weight: bolder;
             width: auto;
-            margin-left: 4px;
+            margin-left: 10px;
             margin-top: 3px;
 
             span[class^="ms-Dropdown-title title_"]{
                 border: none;
-                border-bottom: 2px solid $ms-color-themePrimary;
+                border-bottom: 2px solid purple;
                 padding: 0px;
             }
 

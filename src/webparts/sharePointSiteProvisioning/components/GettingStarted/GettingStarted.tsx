@@ -1,11 +1,16 @@
 import * as React from 'react';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import styles from './GettingStarted.module.scss';
+import Navigation from '../Navigation/Navigation';
 
 
 export interface IGettingStartedProps {
     onDropDownChange: (item: IDropdownOption) => void;
     dropDownClassState: boolean;
+    isBackDisabled : boolean;
+    isForwardDisabled : boolean;
+    onBackClicked : () => void;
+    onForwadrdClicked : () => void;
 }
 
 
@@ -36,6 +41,12 @@ const gettingStarted = (props: IGettingStartedProps) => {
                     </div>
                 </div>
             </div>
+            <Navigation 
+                isBackDisabled={props.isBackDisabled}
+                isForwardDisabled={props.isForwardDisabled}
+                onBackClicked={props.onBackClicked}
+                onForwadrdClicked={props.onForwadrdClicked}
+            />
         </div>
     );
 };
