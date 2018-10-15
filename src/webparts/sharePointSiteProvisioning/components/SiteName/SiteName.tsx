@@ -18,39 +18,37 @@ export interface ISiteNameProps {
 
 const siteName = (props: ISiteNameProps) => {
     return (
-        <Aux>
-            <div className={styles.SiteNameMain}>
-                <div className={styles.LeftLayoutHolder}>
-                    <LeftLayout LayoutText="What is the name of your business or website?" />
+        <div className={styles.SiteNameMain}>
+            <div className={styles.LeftLayoutHolder}>
+                <LeftLayout LayoutText="What is the name of your business or website?" />
+            </div>
+            <div className={styles.RightLayoutHolder}>
+                <div className={styles.TextHolder}>
+                    <TextField
+                        underlined={true}
+                        placeholder="Give your site a name"
+                        onBlur={props.siteNameTextFieldOnBlur}
+                        value={props.siteName}
+                    />
                 </div>
-                <div className={styles.RightLayoutHolder}>
-                    <div className={styles.TextHolder}>
-                        <TextField
-                            underlined={true}
-                            placeholder="Give your site a name"
-                            onBlur={props.siteNameTextFieldOnBlur}
-                            value={props.siteName}
-                        />
-                    </div>
-                    <div className={styles.URLHolder}>
-                        <span>https://team.effem.com/sites/</span>
-                        <TextField
-                            underlined={true}
-                            className={styles.URLField}
-                            value={props.siteNameURL}
-                        />
-                    </div>
-                    <div className={styles.NavigationFooter}>
-                        <Navigation
-                            isBackDisabled={props.isBackDisabled}
-                            isForwardDisabled={props.isForwardDisabled}
-                            onBackClicked={props.onBackClicked}
-                            onForwadrdClicked={props.onForwadrdClicked}
-                        />
-                    </div>
+                <div className={styles.URLHolder}>
+                    <span>https://team.effem.com/sites/</span>
+                    <TextField
+                        underlined={true}
+                        className={styles.URLField}
+                        value={props.siteNameURL}
+                    />
+                </div>
+                <div className={styles.NavigationFooter}>
+                    <Navigation
+                        isBackDisabled={props.isBackDisabled}
+                        isForwardDisabled={props.isForwardDisabled}
+                        onBackClicked={props.onBackClicked}
+                        onForwadrdClicked={props.onForwadrdClicked}
+                    />
                 </div>
             </div>
-        </Aux>
+        </div>
     );
 };
 

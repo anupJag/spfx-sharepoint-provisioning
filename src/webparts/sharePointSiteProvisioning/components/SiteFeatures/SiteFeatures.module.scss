@@ -1,0 +1,21 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.SiteFeatures{
+    width: 100%;
+    height: 450px;
+    display: flex;
+    flex-direction: row;
+
+    .LeftLayoutHolder{
+        width: 50%;
+        @include ms-font-xl;
+        @include ms-fontColor-white;
+        background-color: $ms-color-themePrimary;
+    }
+
+    .RightLayoutHolder{
+        width: 50%;
+        margin: auto;
+    }
+
+}

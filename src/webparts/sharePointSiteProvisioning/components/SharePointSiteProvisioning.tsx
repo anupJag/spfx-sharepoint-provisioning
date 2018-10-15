@@ -7,6 +7,7 @@ import GettingStarted from './GettingStarted/GettingStarted';
 import * as strings from 'SharePointSiteProvisioningWebPartStrings';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import SiteNamePage from './SiteName/SiteName';
+import SiteFeatures from './SiteFeatures/SiteFeatures';
 
 export interface ISharePointSiteProvisioningState {
   getStartedClicked: boolean;
@@ -160,7 +161,7 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
           />;
         break;
 
-      default:
+      case 1:
         pageToBeRendered =
           <SiteNamePage
             isBackDisabled={this.state.isBackButtonDisabled}
@@ -172,6 +173,11 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
             siteName={this.state.provisioningDetails ? this.state.provisioningDetails.SiteName ? this.state.provisioningDetails.SiteName : null : null}
           />;
         break;
+
+        default:
+          pageToBeRendered = 
+          <SiteFeatures />;
+          break;
 
     }
 
