@@ -11,6 +11,7 @@ export interface IGettingStartedProps {
     isForwardDisabled : boolean;
     onBackClicked : () => void;
     onForwadrdClicked : () => void;
+    selectedKey : any;
 }
 
 
@@ -36,6 +37,7 @@ const gettingStarted = (props: IGettingStartedProps) => {
                                 options={dropDownOptions}
                                 onChanged={props.onDropDownChange}
                                 className={cssClassToBeApplied}
+                                selectedKey={props.selectedKey}
                             />
                         </div>
                     </div>

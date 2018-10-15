@@ -1,0 +1,59 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+
+.SiteNameMain{
+    width: 100%;
+    height: 450px;
+    display: flex;
+    flex-direction: row;
+
+    .LeftLayoutHolder{
+        width: 50%;
+        @include ms-font-xl;
+        @include ms-fontColor-white;
+        background-color: $ms-color-themePrimary;
+    }
+
+    .RightLayoutHolder{
+        width: 50%;
+        margin: auto;
+
+        .TextHolder{
+            width: 90%;
+            margin-left: 17px;
+            font-family: 'Roboto';
+
+            input[class^="ms-TextField-field field_"]{
+                font-weight: bolder;
+                font-size: 1.2rem;
+            }
+        }
+
+        .URLHolder{
+            display: flex;
+            width: 90%;
+            margin-left: 17px;
+            padding-top: 26px;
+            font-size: 0.8em;
+            font-family: Roboto;
+            font-weight: bold;
+
+            .URLField{
+                top: -8px;
+
+                input[class^="ms-TextField-field field_"]{
+                    font-size: 0.8rem;
+                    font-family: Roboto;
+                    font-weight: bold;
+                }                
+            }
+        }
+
+        .NavigationFooter{
+            position: absolute;
+            bottom: 7%;
+            right: 2%;
+        }
+    } 
+
+}
