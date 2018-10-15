@@ -170,10 +170,10 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
             siteNameTextFieldOnBlur={this.onSiteNameEnteredHandler.bind(this)}
             siteNameURL={this.state.provisioningDetails ? this.state.provisioningDetails.SiteURL ? this.state.provisioningDetails.SiteURL : null : null}
             siteName={this.state.provisioningDetails ? this.state.provisioningDetails.SiteName ? this.state.provisioningDetails.SiteName : null : null}
-          />
+          />;
         break;
 
-    };
+    }
 
 
     return (
