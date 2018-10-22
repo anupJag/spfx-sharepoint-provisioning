@@ -1,6 +1,6 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 
-.SiteFeatures{
+.SiteTimeZone{
     width: 100%;
     height: 450px;
     display: flex;
@@ -17,15 +17,9 @@
         width: 50%;
         margin: auto;
 
-        .CheckboxHolder{
-            margin-left: 40%; 
-        }
-
-        .NavigationFooter{
-            position: absolute;
-            bottom: 7%;
-            right: 2%;
+        .TimeZoneSelection{
+            width: 90%;
+            margin-left: 17px;
         }
     }
-
 }
