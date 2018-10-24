@@ -1,6 +1,6 @@
 @import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 
-.SiteFeatures{
+.ReviewAndEdit{
     width: 100%;
     height: 450px;
     display: flex;
@@ -14,17 +14,14 @@
     }
 
     .RightLayoutHolder{
+        //width: 50%;
         margin: auto;
-        
-        .CheckboxHolder{
-            display: block; 
+
+        .ReviewEditContainer{
+            width: 95%;
+            
         }
 
-        .NavigationFooter{
-            position: absolute;
-            bottom: 7%;
-            right: 2%;
-        }
     }
 
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './SharePointSiteProvisioning.module.scss';
 import { ISharePointSiteProvisioningProps } from './ISharePointSiteProvisioningProps';
-import { escape, findIndex } from '@microsoft/sp-lodash-subset';
+import { escape, findIndex, find, assign } from '@microsoft/sp-lodash-subset';
 import Welcome from './Welcome/Welcome';
 import GettingStarted from './GettingStarted/GettingStarted';
 import * as strings from 'SharePointSiteProvisioningWebPartStrings';
@@ -9,8 +9,19 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import SiteNamePage from './SiteName/SiteName';
 import SiteFeatures from './SiteFeatures/SiteFeatures';
 import SiteTimeZone from './SiteTimeZone/SiteTimeZone';
+import ReviewAndEdit from './ReviewAndEdit/ReviewAndEdit';
 import { IProvisioningDetails, IProvisioningFeature, IProvisioningTimeZone } from './IProvisioningInterfaces';
 import pnp, { Web } from 'sp-pnp-js';
+import { IPersonaProps } from 'office-ui-fabric-react/lib/Persona';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
+import {
+  IClientPeoplePickerSearchUser,
+  IEnsurableSharePointUser,
+  IEnsureUser,
+  IOfficeUiFabricPeoplePickerState,
+  SharePointUserPersona
+} from './models/OfficeUiFabricPeoplePicker';
 
 export interface ISharePointSiteProvisioningState {
   getStartedClicked: boolean;
@@ -30,11 +41,44 @@ const LAST_PAGE: number = 9;
 
 export default class SharePointSiteProvisioning extends React.Component<ISharePointSiteProvisioningProps, ISharePointSiteProvisioningState> {
 
+  private _peopleList;
+  private contextualMenuItems: IContextualMenuItem[] = [
+    {
+      key: 'newItem',
+      icon: 'circlePlus',
+      name: 'New'
+    },
+    {
+      key: 'upload',
+      icon: 'upload',
+      name: 'Upload'
+    },
+    {
+      key: 'divider_1',
+      name: '-',
+    },
+    {
+      key: 'rename',
+      name: 'Rename'
+    },
+    {
+      key: 'properties',
+      name: 'Properties'
+    },
+    {
+      key: 'disabled',
+      name: 'Disabled item',
+      disabled: true
+    }
+  ];
+
   /**
    *Default Constructor
    */
   constructor(props: ISharePointSiteProvisioningProps) {
     super(props);
+    this._peopleList = [];
+
     this.state = {
       getStartedClicked: false,
       gettingStartedClassState: false,
@@ -79,9 +123,8 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
       }
     }).get().then(p => p).catch((error: any) => error);
 
-    debugger;
     if (data) {
-      if(!data.status){
+      if (!data.status) {
         data.forEach((element: IProvisioningTimeZone) => {
           tempTimeZone.push({
             text: element.SP_Key,
@@ -89,7 +132,7 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
           })
         });
       }
-      else{
+      else {
         //Get Error Code and show error details
       }
     }
@@ -210,6 +253,79 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
     });
   }
 
+  protected timeZoneDropdownChangeHandler = (item: IDropdownOption): void => {
+    let tempProvisioningDetails: IProvisioningDetails = { ...this.state.provisioningDetails };
+    tempProvisioningDetails["SiteTimeZone"] = item.key as string;
+
+    this.setState({
+      provisioningDetails: tempProvisioningDetails
+    });
+  }
+
+  private _onFilterChangedHandler(filterText: string, currentPersonas: IPersonaProps[], limitResults?: number) {
+    if (filterText) {
+      if (filterText.length > 2) {
+        debugger;
+        return this._searchPeople(filterText, this._peopleList);
+      }
+    } else {
+      return [];
+    }
+  }
+
+  private _searchPeople(terms: string, results: IPersonaProps[]): IPersonaProps[] | Promise<IPersonaProps[]> {
+    const userRequestUrl: string = `${this.props.webURL}/_api/SP.UI.ApplicationPages.ClientPeoplePickerWebServiceInterface.clientPeoplePickerSearchUser`;
+
+    const userQueryParams = {
+      'queryParams': {
+        'AllowEmailAddresses': true,
+        'AllowMultipleEntities': false,
+        'AllUrlZones': false,
+        'MaximumEntitySuggestions': 5,
+        'PrincipalSource': 15,
+        'PrincipalType': 1,
+        'QueryString': terms
+      }
+    };
+
+    return new Promise<SharePointUserPersona[]>((resolve, reject) => {
+      this.props.spHttpClient.post(userRequestUrl, SPHttpClient.configurations.v1, {
+        body: JSON.stringify(userQueryParams)
+      }).then((response: SPHttpClientResponse) => {
+        return response.json();
+      }).then((response: { value: string }) => {
+        let userQueryResults: IClientPeoplePickerSearchUser[] = JSON.parse(response.value);
+        let persons = userQueryResults.map(p => new SharePointUserPersona(p as IEnsurableSharePointUser));
+        return persons;
+      }).then(async (persons) => {
+        const ensureUserUrl = `${this.props.webURL}/_api/web/ensureUser`;
+        const userCollection: IEnsureUser[] = [];
+        for (let i = 0; i < persons.length; i++) {
+          let p = persons[i];
+          var userQuery = JSON.stringify({ logonName: p.User.Key });
+          var user = await this.props.spHttpClient.post(ensureUserUrl, SPHttpClient.configurations.v1, {
+            body: userQuery
+          }).then((response: SPHttpClientResponse) => response.json())
+            .then((json: IEnsureUser) => json);
+
+          userCollection.push(user);
+        }
+
+        userCollection.map(v => {
+          let userPersona = find(persons, o => o.User.Key == v.LoginName);
+          if (userPersona && userPersona.User) {
+            let user = userPersona.User;
+            assign(user, v);
+            userPersona.User = user;
+          }
+        });
+        resolve(persons);
+      }, (error: any): void => {
+        reject(this._peopleList = []);
+      });
+    });
+  }
+
   public render(): React.ReactElement<ISharePointSiteProvisioningProps> {
     let pageToBeRendered: JSX.Element | JSX.Element[];
 
@@ -254,13 +370,25 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
           />;
         break;
 
-      default:
+      case 3:
         pageToBeRendered =
           <SiteTimeZone
             timeZoneOptions={this.state.siteTimeZones}
+            timeZoneDropDownChanged={this.timeZoneDropdownChangeHandler.bind(this)}
+            isBackDisabled={this.state.isBackButtonDisabled}
+            isForwardDisabled={this.state.isForwardButtonDisabled}
+            onBackClicked={this.isBackButtonClicked.bind(this)}
+            onForwadrdClicked={this.isForwardButtonClicked.bind(this)}
+            selectedKey={this.state.provisioningDetails ? this.state.provisioningDetails.SiteTimeZone ? this.state.provisioningDetails.SiteTimeZone : null : null}
           />
         break;
 
+      default:
+        pageToBeRendered =
+          <ReviewAndEdit
+            _onFilterChanged={this._onFilterChangedHandler.bind(this)}
+          />
+        break;
     }
 
 

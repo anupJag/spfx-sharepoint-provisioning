@@ -14,12 +14,23 @@
     }
 
     .RightLayoutHolder{
-        width: 50%;
         margin: auto;
+        width: 50%;
 
         .TimeZoneSelection{
             width: 90%;
-            margin-left: 17px;
+            margin: auto;
+            
+            span[class^="ms-Dropdown-title"]{
+                border: none;
+                border-bottom: 1px solid purple;
+            }
+        }
+
+        .NavigationFooter{
+            position: absolute;
+            bottom: 7%;
+            right: 2%;
         }
     }
 }

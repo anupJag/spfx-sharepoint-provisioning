@@ -1,0 +1,17 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.ReviewAndEdit{
+
+    .DetailsSection{
+        width: 100%;
+
+        .DetailsContainer{
+            box-sizing: border-box;
+
+            .Details{
+                display: flex;
+                flex-direction: row;
+            }
+        }
+    }
+}

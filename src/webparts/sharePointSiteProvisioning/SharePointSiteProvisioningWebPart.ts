@@ -19,10 +19,12 @@ export interface ISharePointSiteProvisioningWebPartProps {
 export default class SharePointSiteProvisioningWebPart extends BaseClientSideWebPart<ISharePointSiteProvisioningWebPartProps> {
 
   public render(): void {
-    const element: React.ReactElement<ISharePointSiteProvisioningProps > = React.createElement(
+    const element: React.ReactElement<ISharePointSiteProvisioningProps> = React.createElement(
       SharePointSiteProvisioning,
       {
-        description: this.properties.description
+        description: this.properties.description,
+        webURL: this.context.pageContext.web.absoluteUrl,
+        spHttpClient : this.context.spHttpClient
       }
     );
 

@@ -3,6 +3,7 @@ export interface IProvisioningDetails {
     SiteName: string;
     SiteURL: string;
     SiteFeatures: IProvisioningFeature[];
+    SiteTimeZone: string;
 }
 
 export interface IProvisioningFeature {
