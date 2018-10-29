@@ -313,6 +313,7 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
         userCollection.map(v => {
           let userPersona = find(persons, o => o.User.Key == v.LoginName);
           if (userPersona && userPersona.User) {
+            // tslint:disable-next-line:no-shadowed-variable
             let user = userPersona.User;
             assign(user, v);
             userPersona.User = user;
@@ -417,7 +418,7 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
             siteClassificationDropDownChanged={this.siteClassificationDropdownChangeHandler.bind(this)}
             siteClassification={this._siteClassificationList}
             selectedKey={this.state.provisioningDetails ? this.state.provisioningDetails.SiteClassification ? this.state.provisioningDetails.SiteClassification : null : null}
-          />
+          />;
         break;
 
       case 5:
