@@ -3,7 +3,6 @@ import LeftLayout from '../UI/Layout/LeftLayout/LeftLayout';
 import styles from './SiteName.module.scss';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import Navigation from '../Navigation/Navigation';
-import Aux from '../hoc/Auxilliary';
 
 
 export interface ISiteNameProps {
@@ -20,7 +19,7 @@ const siteName = (props: ISiteNameProps) => {
     return (
         <div className={styles.SiteNameMain}>
             <div className={styles.LeftLayoutHolder}>
-                <LeftLayout LayoutText="What is the name of your business or website?" />
+                <LeftLayout LayoutText="What is the name of your site?" />
             </div>
             <div className={styles.RightLayoutHolder}>
                 <div className={styles.TextHolder}>

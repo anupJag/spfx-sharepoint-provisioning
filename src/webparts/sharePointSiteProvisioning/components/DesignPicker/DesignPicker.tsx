@@ -1,26 +1,25 @@
 import * as React from 'react';
 import LeftLayout from '../UI/Layout/LeftLayout/LeftLayout';
-import styles from './ReviewAndEdit.module.scss';
-import ReviewEdit from './ReviewAndEdit/ReviewAndEdit';
+import styles from './DesignPicker.module.scss';
 import Navigation from '../Navigation/Navigation';
 
 
-export interface IReviewAndEdit {
+export interface IDesignPickerProps {
     isBackDisabled: boolean;
     isForwardDisabled: boolean;
     onBackClicked: () => void;
     onForwadrdClicked: () => void;
 }
 
-const reviewAndEdit = (props: IReviewAndEdit) => {
+const designPicker = (props: IDesignPickerProps) => {
     return (
-        <div className={styles.ReviewAndEdit}>
+        <div className={styles.DesignPickerMain}>
             <div className={styles.LeftLayoutHolder}>
-                <LeftLayout LayoutText="Review and Edit your info" />
+                <LeftLayout LayoutText="Pick a design you like" />
             </div>
             <div className={styles.RightLayoutHolder}>
-                <div className={styles.ReviewEditContainer}>
-                    <ReviewEdit />
+                <div className={styles.DesignPickerSection}>
+                    Desgin Picker Section
                 </div>
                 <div className={styles.NavigationFooter}>
                     <Navigation
@@ -35,4 +34,4 @@ const reviewAndEdit = (props: IReviewAndEdit) => {
     );
 };
 
-export default reviewAndEdit;
+export default designPicker;

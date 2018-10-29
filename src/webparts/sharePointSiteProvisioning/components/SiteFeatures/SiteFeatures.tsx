@@ -19,7 +19,7 @@ const siteFeatures = (props: ISiteFeatures) => {
     return (
         <div className={styles.SiteFeatures}>
             <div className={styles.LeftLayoutHolder}>
-                <LeftLayout LayoutText="Does your website need any of these features?" />
+                <LeftLayout LayoutText="Does your site need any of these features?" />
             </div>
             <div className={styles.RightLayoutHolder}>
                 <div className={styles.CheckboxHolder}>

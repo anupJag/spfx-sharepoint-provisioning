@@ -10,6 +10,8 @@ import SiteNamePage from './SiteName/SiteName';
 import SiteFeatures from './SiteFeatures/SiteFeatures';
 import SiteTimeZone from './SiteTimeZone/SiteTimeZone';
 import ReviewAndEdit from './ReviewAndEdit/ReviewAndEdit';
+import SiteClassification from './SiteClassification/SiteClassification';
+import DesignPicker from './DesignPicker/DesignPicker';
 import { IProvisioningDetails, IProvisioningFeature, IProvisioningTimeZone } from './IProvisioningInterfaces';
 import pnp, { Web } from 'sp-pnp-js';
 import { IPersonaProps } from 'office-ui-fabric-react/lib/Persona';
@@ -22,6 +24,8 @@ import {
   IOfficeUiFabricPeoplePickerState,
   SharePointUserPersona
 } from './models/OfficeUiFabricPeoplePicker';
+import SecondaryOwner from './SecondaryOwner/SecondaryOwner';
+import { ValidationState } from 'office-ui-fabric-react/lib/Pickers';
 
 export interface ISharePointSiteProvisioningState {
   getStartedClicked: boolean;
@@ -42,35 +46,7 @@ const LAST_PAGE: number = 9;
 export default class SharePointSiteProvisioning extends React.Component<ISharePointSiteProvisioningProps, ISharePointSiteProvisioningState> {
 
   private _peopleList;
-  private contextualMenuItems: IContextualMenuItem[] = [
-    {
-      key: 'newItem',
-      icon: 'circlePlus',
-      name: 'New'
-    },
-    {
-      key: 'upload',
-      icon: 'upload',
-      name: 'Upload'
-    },
-    {
-      key: 'divider_1',
-      name: '-',
-    },
-    {
-      key: 'rename',
-      name: 'Rename'
-    },
-    {
-      key: 'properties',
-      name: 'Properties'
-    },
-    {
-      key: 'disabled',
-      name: 'Disabled item',
-      disabled: true
-    }
-  ];
+  private _siteClassificationList: IDropdownOption[];
 
   /**
    *Default Constructor
@@ -78,6 +54,20 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
   constructor(props: ISharePointSiteProvisioningProps) {
     super(props);
     this._peopleList = [];
+    this._siteClassificationList = [
+      {
+        key: "Internal Use Only",
+        text: "Internal Use Only"
+      },
+      {
+        key: "Confidential",
+        text: "Confidential"
+      },
+      {
+        key: "Highly Confidential",
+        text: "Highly Confidential"
+      }
+    ];
 
     this.state = {
       getStartedClicked: false,
@@ -100,7 +90,7 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
           FeatureName: "Charts"
         }
       ],
-      siteTimeZones: []
+      siteTimeZones: [],
     };
   }
 
@@ -129,7 +119,7 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
           tempTimeZone.push({
             text: element.SP_Key,
             key: element.SP_Value
-          })
+          });
         });
       }
       else {
@@ -231,7 +221,7 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
     }
     else {
       tempFeatureCollection.splice(findIndex(tempFeatureCollection, el => {
-        return el.FeatureID === key
+        return el.FeatureID === key;
       }), 1);
     }
     tempProvisioningDetails.SiteFeatures = (tempFeatureCollection && tempFeatureCollection.length > 0 ? tempFeatureCollection : []);
@@ -255,7 +245,17 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
 
   protected timeZoneDropdownChangeHandler = (item: IDropdownOption): void => {
     let tempProvisioningDetails: IProvisioningDetails = { ...this.state.provisioningDetails };
-    tempProvisioningDetails["SiteTimeZone"] = item.key as string;
+    tempProvisioningDetails["SiteTimeZone"] = item.key.toString();
+
+    this.setState({
+      provisioningDetails: tempProvisioningDetails
+    });
+  }
+
+
+  protected siteClassificationDropdownChangeHandler = (item: IDropdownOption): void => {
+    let tempProvisioningDetails: IProvisioningDetails = { ...this.state.provisioningDetails };
+    tempProvisioningDetails["SiteClassification"] = item.key.toString();
 
     this.setState({
       provisioningDetails: tempProvisioningDetails
@@ -265,7 +265,6 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
   private _onFilterChangedHandler(filterText: string, currentPersonas: IPersonaProps[], limitResults?: number) {
     if (filterText) {
       if (filterText.length > 2) {
-        debugger;
         return this._searchPeople(filterText, this._peopleList);
       }
     } else {
@@ -326,6 +325,31 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
     });
   }
 
+  private _validateInputHandler = (input: string): ValidationState => {
+    if (input.indexOf('@') !== -1) {
+      return ValidationState.valid;
+    } else if (input.length > 1) {
+      return ValidationState.warning;
+    } else {
+      return ValidationState.invalid;
+    }
+  }
+
+  private peoplePickerOnChangeHandler = (items: any[]): void => {
+    let tempSecondaryOwners: string[] = [];
+    let tempProvisioningDetails: IProvisioningDetails = { ...this.state.provisioningDetails };
+    items.forEach((element: SharePointUserPersona) => {
+      tempSecondaryOwners.push(element.User.LoginName);
+    });
+
+    tempProvisioningDetails["SiteSecondaryUsers"] = tempSecondaryOwners;
+
+    this.setState({
+      provisioningDetails: tempProvisioningDetails
+    });
+
+  }
+
   public render(): React.ReactElement<ISharePointSiteProvisioningProps> {
     let pageToBeRendered: JSX.Element | JSX.Element[];
 
@@ -379,15 +403,55 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
             isForwardDisabled={this.state.isForwardButtonDisabled}
             onBackClicked={this.isBackButtonClicked.bind(this)}
             onForwadrdClicked={this.isForwardButtonClicked.bind(this)}
-            selectedKey={this.state.provisioningDetails ? this.state.provisioningDetails.SiteTimeZone ? this.state.provisioningDetails.SiteTimeZone : null : null}
+            selectedKey={this.state.provisioningDetails ? this.state.provisioningDetails["SiteTimeZone"] ? this.state.provisioningDetails["SiteTimeZone"] : null : null}
+          />;
+        break;
+
+      case 4:
+        pageToBeRendered =
+          <SiteClassification
+            isBackDisabled={this.state.isBackButtonDisabled}
+            isForwardDisabled={this.state.isForwardButtonDisabled}
+            onBackClicked={this.isBackButtonClicked.bind(this)}
+            onForwadrdClicked={this.isForwardButtonClicked.bind(this)}
+            siteClassificationDropDownChanged={this.siteClassificationDropdownChangeHandler.bind(this)}
+            siteClassification={this._siteClassificationList}
+            selectedKey={this.state.provisioningDetails ? this.state.provisioningDetails.SiteClassification ? this.state.provisioningDetails.SiteClassification : null : null}
           />
+        break;
+
+      case 5:
+        pageToBeRendered =
+          <SecondaryOwner
+            _onFilterChanged={this._onFilterChangedHandler.bind(this)}
+            _validateInput={this._validateInputHandler.bind(this)}
+            peoplePickerOnChange={this.peoplePickerOnChangeHandler.bind(this)}
+            isBackDisabled={this.state.isBackButtonDisabled}
+            isForwardDisabled={this.state.isForwardButtonDisabled}
+            onBackClicked={this.isBackButtonClicked.bind(this)}
+            onForwadrdClicked={this.isForwardButtonClicked.bind(this)}
+          />;
+        break;
+
+
+      case 6:
+        pageToBeRendered =
+          <ReviewAndEdit
+            isBackDisabled={this.state.isBackButtonDisabled}
+            isForwardDisabled={this.state.isForwardButtonDisabled}
+            onBackClicked={this.isBackButtonClicked.bind(this)}
+            onForwadrdClicked={this.isForwardButtonClicked.bind(this)}
+          />;
         break;
 
       default:
         pageToBeRendered =
-          <ReviewAndEdit
-            _onFilterChanged={this._onFilterChangedHandler.bind(this)}
-          />
+          <DesignPicker
+            isBackDisabled={this.state.isBackButtonDisabled}
+            isForwardDisabled={this.state.isForwardButtonDisabled}
+            onBackClicked={this.isBackButtonClicked.bind(this)}
+            onForwadrdClicked={this.isForwardButtonClicked.bind(this)}
+          />;
         break;
     }
 

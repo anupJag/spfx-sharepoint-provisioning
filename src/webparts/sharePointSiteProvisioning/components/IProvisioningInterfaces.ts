@@ -4,6 +4,8 @@ export interface IProvisioningDetails {
     SiteURL: string;
     SiteFeatures: IProvisioningFeature[];
     SiteTimeZone: string;
+    SiteClassification : string;
+    SiteSecondaryUsers : string[];
 }
 
 export interface IProvisioningFeature {
