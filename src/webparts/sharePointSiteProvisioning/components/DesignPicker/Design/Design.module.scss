@@ -2,13 +2,15 @@
 
 .container {
     position: relative;
-    width: 40%;
+    width: 45%;
+    margin: 0px 0px 12px 12px;
+    cursor: pointer;
 }
   
 .holder {
     display: block;
     //background-image: url(https://static.parastorage.com/services/adi-web/2.156.4//images/design-panel/theme-thumbnail_evolution.jpg);
-    height: 144px;
+    height: 110px;
 }
   
 .labelContainer{
@@ -41,7 +43,6 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: transparent;
     overflow: hidden;
     width: 100%;
     height: 100%;
@@ -51,7 +52,6 @@
 .container:hover .overlay {
     width: 94%;
     opacity: 1;
-    background-color: rgb(0, 80, 139);
 }
   
 .container:hover .colorContainer {
@@ -63,12 +63,12 @@
     font-size: 16px;
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 40%;
     -webkit-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     white-space: pre-wrap;
-    line-height: 24px;
+    line-height: 14px;
 }
   
 .colorContainer{
@@ -86,4 +86,5 @@
 .innerColor{
     width: inherit;
     flex: 1;
+    font-family: 'Roboto';
 }

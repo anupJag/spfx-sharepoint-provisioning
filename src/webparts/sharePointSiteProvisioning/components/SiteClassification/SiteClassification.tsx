@@ -30,6 +30,7 @@ const siteClassification = (props: ISiteClassification) => {
                         options={props.siteClassification}
                         onChanged={props.siteClassificationDropDownChanged}
                         selectedKey={props.selectedKey}
+                        placeHolder="Select your site classification"
                     />
                 </div>
                 <div className={styles.NavigationFooter}>

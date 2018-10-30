@@ -12,6 +12,7 @@ import SiteTimeZone from './SiteTimeZone/SiteTimeZone';
 import ReviewAndEdit from './ReviewAndEdit/ReviewAndEdit';
 import SiteClassification from './SiteClassification/SiteClassification';
 import DesignPicker from './DesignPicker/DesignPicker';
+import LayoutSelection from './LayoutSelector/LayoutSelector';
 import { IProvisioningDetails, IProvisioningFeature, IProvisioningTimeZone } from './IProvisioningInterfaces';
 import pnp, { Web } from 'sp-pnp-js';
 import { IPersonaProps } from 'office-ui-fabric-react/lib/Persona';
@@ -26,6 +27,7 @@ import {
 } from './models/OfficeUiFabricPeoplePicker';
 import SecondaryOwner from './SecondaryOwner/SecondaryOwner';
 import { ValidationState } from 'office-ui-fabric-react/lib/Pickers';
+import { IDesign } from './DesignPicker/Design/Design';
 
 export interface ISharePointSiteProvisioningState {
   getStartedClicked: boolean;
@@ -36,6 +38,7 @@ export interface ISharePointSiteProvisioningState {
   provisioningDetails: IProvisioningDetails;
   availableFeatures: IProvisioningFeature[];
   siteTimeZones: IDropdownOption[];
+  designPickerCollection : IDesign[];
 }
 
 
@@ -91,6 +94,63 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
         }
       ],
       siteTimeZones: [],
+      designPickerCollection: [
+        {
+          DesignLabelName: "Office Blue",
+          DesignLabelDesc: "Cosmopolitan style with an influential, modern feel",
+          DesignBackgroundURL: "https://static.parastorage.com/services/adi-web/2.156.4//images/design-panel/theme-thumbnail_sky-high.jpg",
+          DesignOnHoverBgColor: "rgb(0, 56, 98)",
+          DesignTheme: ["rgb(0, 102, 227)", "rgb(255, 255, 255)", "rgb(0, 0, 0)"],
+          DesignValue: "Blue",
+          DesignSelected: false
+        },
+        {
+          DesignLabelName: "Evolution",
+          DesignLabelDesc: "Visionary and progressive with a contemporary touch",
+          DesignBackgroundURL: "https://static.parastorage.com/services/adi-web/2.156.4//images/design-panel/theme-thumbnail_evolution.jpg",
+          DesignOnHoverBgColor: "rgb(34, 87, 117)",
+          DesignTheme: ["rgb(208, 98, 40)", "rgb(223, 143, 100)", "rgb(152, 111, 11)"],
+          DesignValue: "Orange",
+          DesignSelected: false
+        },
+        {
+          DesignLabelName: "Lush",
+          DesignLabelDesc: "Rich, tasteful and full-bodied, like a fine red wine",
+          DesignBackgroundURL: "https://static.parastorage.com/services/adi-web/2.156.4//images/design-panel/theme-thumbnail_lush.jpg",
+          DesignOnHoverBgColor: "rgb(111, 2, 63)",
+          DesignTheme: ["rgb(174, 56, 62)", "rgb(200, 108, 112)", "rgb(202, 80, 16)"],
+          DesignValue: "Red",
+          DesignSelected: false
+        },
+        {
+          DesignLabelName: "Sophisticated",
+          DesignLabelDesc: "A seasoned world traveler, refined and cultured",
+          DesignBackgroundURL: "https://static.parastorage.com/services/adi-web/2.156.4//images/design-panel/theme-thumbnail_sophisticated.jpg",
+          DesignOnHoverBgColor: "rgb(14, 31, 88)",
+          DesignTheme: ["rgb(135, 100, 184)", "rgb(147, 114, 192)", "rgb(178, 154, 212)", "rgb(3, 131, 135)"],
+          DesignValue: "Purple",
+          DesignSelected: false
+        },
+        {
+          DesignLabelName: "Forest Green",
+          DesignLabelDesc: "Established and professional, a highly approachable feel",
+          DesignBackgroundURL: "https://static.parastorage.com/services/adi-web/2.156.4//images/design-panel/theme-thumbnail_hi-rise.jpg",
+          DesignOnHoverBgColor: "rgb(25, 64, 86)",
+          DesignTheme: ["rgb(73, 130, 5)", "rgb(90, 145, 23)", "rgb(133, 180, 76)", "rgb(3, 131, 135)"],
+          DesignValue: "Green",
+          DesignSelected: false
+        },
+        {
+          DesignLabelName: "Clean",
+          DesignLabelDesc: "Neat and balanced, like a perfectly blank slate",
+          DesignBackgroundURL: "https://static.parastorage.com/services/adi-web/2.156.4//images/design-panel/theme-thumbnail_clean.jpg",
+          DesignOnHoverBgColor: "rgb(227, 242, 243)",
+          DesignFontColor: "#000",
+          DesignTheme: ["rgb(105, 121, 126)", "rgb(120, 136, 141)", "rgb(159, 173, 177)", "rgb(0, 120, 212)"],
+          DesignValue: "Grey",
+          DesignSelected: false
+        }
+      ]
     };
   }
 
@@ -351,6 +411,28 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
 
   }
 
+  private onDesignStyleClickHandler = (index, event) => {
+    let tempDesignPicker : IDesign[] = [...this.state.designPickerCollection];
+    let tempProvisioningDetails: IProvisioningDetails = { ...this.state.provisioningDetails };
+
+    tempProvisioningDetails["SiteTheme"] = tempDesignPicker[index]["DesignValue"] as string;
+
+    for (let i = 0; i < tempDesignPicker.length; i++) {
+      if(index === i){
+        tempDesignPicker[i]["DesignSelected"] = true;
+      }
+      else{
+        tempDesignPicker[i]["DesignSelected"] = false;
+      }      
+    }
+
+    this.setState({
+      designPickerCollection: tempDesignPicker,
+      provisioningDetails: tempProvisioningDetails
+    });
+
+  }
+
   public render(): React.ReactElement<ISharePointSiteProvisioningProps> {
     let pageToBeRendered: JSX.Element | JSX.Element[];
 
@@ -445,15 +527,22 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
           />;
         break;
 
-      default:
+      case 7:
         pageToBeRendered =
           <DesignPicker
             isBackDisabled={this.state.isBackButtonDisabled}
             isForwardDisabled={this.state.isForwardButtonDisabled}
             onBackClicked={this.isBackButtonClicked.bind(this)}
             onForwadrdClicked={this.isForwardButtonClicked.bind(this)}
+            designCollection={this.state.designPickerCollection}
+            designCollectionOnClick={this.onDesignStyleClickHandler.bind(this)}
           />;
         break;
+
+      default:
+        pageToBeRendered = 
+        <LayoutSelection />;
+      break;
     }
 
 

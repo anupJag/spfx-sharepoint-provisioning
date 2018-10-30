@@ -1,0 +1,47 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.LayoutSelector{
+    width: 100%;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden !important;
+
+
+    .LayoutSelectorHeader{
+        width: inherit;
+        height: 30%;
+        text-align: center;
+        padding-top: 3em;
+
+        .Header{
+            font-family: 'Roboto';
+            font-size: 24px;
+            font-weight: bolder;
+            color: #000;
+        }
+
+        .SubHeader{
+            font-family: 'Roboto';
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 1.62;
+            letter-spacing: .25px;
+        }
+    }
+
+    .LayoutSelection{
+        width: inherit;
+        height: 70%;
+        text-align: center;
+
+        .LayoutContainer{
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+    }
+
+}

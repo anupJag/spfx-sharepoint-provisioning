@@ -15,11 +15,14 @@
     }
 
     .RightLayoutHolder{
-        margin: auto;
+        margin-top: 2%;
         width: 50%;
 
         .DesignPickerSection{
-            width: 100%
+            width: 100%;
+            display: flex;
+            flex-flow: wrap;
+            flex-direction: row;
         }
 
         .NavigationFooter{
