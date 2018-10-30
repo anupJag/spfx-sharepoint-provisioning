@@ -5,6 +5,11 @@
     height: 100%;
     width: 30%;
     margin-left: 15px;
+    z-index: 0;
+
+    &:hover{
+        z-index: 1;
+    }
 
     .Container{
         position: relative;
@@ -17,7 +22,6 @@
             height: 100%;
             width: 100%;
             transition: transform .8s;
-            z-index: 0;
 
             .InnerDivImg{
                 height: 100%;
@@ -31,7 +35,6 @@
                 -ms-transform: scale(1.2); /* IE 9 */
                 -webkit-transform: scale(1.2); /* Safari 3-8 */
                 transform: scale(1.2);
-                z-index: 1;
             }
         }
     }
