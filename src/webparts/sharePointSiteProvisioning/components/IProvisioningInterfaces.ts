@@ -7,6 +7,7 @@ export interface IProvisioningDetails {
     SiteClassification: string;
     SiteSecondaryUsers: string[];
     SiteTheme: string;
+    SiteDesign: string;
 }
 
 export interface IProvisioningFeature {
@@ -20,8 +21,13 @@ export interface IProvisioningTimeZone {
 }
 
 export class LayoutSelectorImages {
-    static _Simple: string = "https://team.effem.com/sites/spfxdev/SiteAssets/ProvisioningImages/Simple.PNG";
-    static _Social: string = "https://team.effem.com/sites/spfxdev/SiteAssets/ProvisioningImages/Social.PNG";
-    static _Traditional: string = "https://team.effem.com/sites/spfxdev/SiteAssets/ProvisioningImages/Traditional.PNG";
+    // public static  _Simple: string = "https://team.effem.com/sites/spfxdev/SiteAssets/ProvisioningImages/Simple.PNG";
+    // public static _Social: string = "https://team.effem.com/sites/spfxdev/SiteAssets/ProvisioningImages/Social.PNG";
+    // public static _Traditional: string = "https://team.effem.com/sites/spfxdev/SiteAssets/ProvisioningImages/Traditional.PNG";
+
+
+    public static  _Simple: string = "https://publiccdn.sharepointonline.com/myadmo365.sharepoint.com/CDN/ProvisioningImages/Simple.PNG";
+    public static _Social: string = "https://publiccdn.sharepointonline.com/myadmo365.sharepoint.com/CDN/ProvisioningImages/Social.PNG";
+    public static _Traditional: string = "https://publiccdn.sharepointonline.com/myadmo365.sharepoint.com/CDN/ProvisioningImages/Traditional.PNG";
     
 }

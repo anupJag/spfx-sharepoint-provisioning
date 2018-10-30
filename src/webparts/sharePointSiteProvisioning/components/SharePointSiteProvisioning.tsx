@@ -13,6 +13,7 @@ import ReviewAndEdit from './ReviewAndEdit/ReviewAndEdit';
 import SiteClassification from './SiteClassification/SiteClassification';
 import DesignPicker from './DesignPicker/DesignPicker';
 import LayoutSelection from './LayoutSelector/LayoutSelector';
+import SiteCreationStatus from './SiteCreationStatus/SiteCreationStatus';
 import { IProvisioningDetails, IProvisioningFeature, IProvisioningTimeZone } from './IProvisioningInterfaces';
 import pnp, { Web } from 'sp-pnp-js';
 import { IPersonaProps } from 'office-ui-fabric-react/lib/Persona';
@@ -28,6 +29,7 @@ import {
 import SecondaryOwner from './SecondaryOwner/SecondaryOwner';
 import { ValidationState } from 'office-ui-fabric-react/lib/Pickers';
 import { IDesign } from './DesignPicker/Design/Design';
+import { ILayoutImage } from './LayoutSelector/LayoutImage/LayoutImage';
 
 export interface ISharePointSiteProvisioningState {
   getStartedClicked: boolean;
@@ -38,7 +40,8 @@ export interface ISharePointSiteProvisioningState {
   provisioningDetails: IProvisioningDetails;
   availableFeatures: IProvisioningFeature[];
   siteTimeZones: IDropdownOption[];
-  designPickerCollection : IDesign[];
+  designPickerCollection: IDesign[];
+  layoutImageURL: ILayoutImage[];
 }
 
 
@@ -50,6 +53,7 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
 
   private _peopleList;
   private _siteClassificationList: IDropdownOption[];
+  private _CompletionLabels : string[];
 
   /**
    *Default Constructor
@@ -71,6 +75,8 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
         text: "Highly Confidential"
       }
     ];
+
+    this._CompletionLabels = ["Getting Web Creation Data", "Analyzing Data", "Creating Site", "Activating WebParts & Features", "Adding Site Admins", "Adding Themes", "Setting Up HomePage", "Applying Layout", "Adding Logo", "Finalizing Site"];
 
     this.state = {
       getStartedClicked: false,
@@ -149,6 +155,23 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
           DesignTheme: ["rgb(105, 121, 126)", "rgb(120, 136, 141)", "rgb(159, 173, 177)", "rgb(0, 120, 212)"],
           DesignValue: "Grey",
           DesignSelected: false
+        }
+      ],
+      layoutImageURL: [
+        {
+          imageURL: "https://publiccdn.sharepointonline.com/myadmo365.sharepoint.com/CDN/ProvisioningImages/Simple.PNG",
+          isSelected: false,
+          layoutName: "Simple"
+        },
+        {
+          imageURL: "https://publiccdn.sharepointonline.com/myadmo365.sharepoint.com/CDN/ProvisioningImages/Social.PNG",
+          isSelected: false,
+          layoutName: "Social"
+        },
+        {
+          imageURL: "https://publiccdn.sharepointonline.com/myadmo365.sharepoint.com/CDN/ProvisioningImages/Traditional.PNG",
+          isSelected: false,
+          layoutName: "Traditional"
         }
       ]
     };
@@ -412,18 +435,18 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
   }
 
   private onDesignStyleClickHandler = (index, event) => {
-    let tempDesignPicker : IDesign[] = [...this.state.designPickerCollection];
+    let tempDesignPicker: IDesign[] = [...this.state.designPickerCollection];
     let tempProvisioningDetails: IProvisioningDetails = { ...this.state.provisioningDetails };
 
     tempProvisioningDetails["SiteTheme"] = tempDesignPicker[index]["DesignValue"] as string;
 
     for (let i = 0; i < tempDesignPicker.length; i++) {
-      if(index === i){
+      if (index === i) {
         tempDesignPicker[i]["DesignSelected"] = true;
       }
-      else{
+      else {
         tempDesignPicker[i]["DesignSelected"] = false;
-      }      
+      }
     }
 
     this.setState({
@@ -431,6 +454,35 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
       provisioningDetails: tempProvisioningDetails
     });
 
+  }
+
+  private onLayoutOptionClickHandler = async (index, event) => {
+    let tempLayoutOption: ILayoutImage[] = [...this.state.layoutImageURL];
+    let tempProvisioningDetails: IProvisioningDetails = { ...this.state.provisioningDetails };
+
+    tempProvisioningDetails["SiteDesign"] = tempLayoutOption[index]["layoutName"] as string;
+
+    for (let i = 0; i < tempLayoutOption.length; i++) {
+      if (index === i) {
+        tempLayoutOption[i]["isSelected"] = true;
+      }
+      else {
+        tempLayoutOption[i]["isSelected"] = false;
+      }
+    }
+
+    this.setState({
+      layoutImageURL: tempLayoutOption,
+      provisioningDetails: tempProvisioningDetails
+    });
+
+    console.log("Page Rendering Started");
+
+    await setTimeout(() => this.setState({
+      currentPage : 9
+    }), 3000);
+
+    console.log("Page Rendering completed");
   }
 
   public render(): React.ReactElement<ISharePointSiteProvisioningProps> {
@@ -539,9 +591,19 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
           />;
         break;
 
-      default:
-        pageToBeRendered = 
-        <LayoutSelection />;
+      case 8:
+        pageToBeRendered =
+          <LayoutSelection
+            layoutImageCollection={this.state.layoutImageURL}
+            onLayoutOptionClick={this.onLayoutOptionClickHandler.bind(this)}
+          />;
+        break;
+      
+      case 9:
+        pageToBeRendered=
+          <SiteCreationStatus 
+            statusLabel={this._CompletionLabels}
+          />;
       break;
     }
 

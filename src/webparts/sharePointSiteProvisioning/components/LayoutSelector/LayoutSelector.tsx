@@ -3,9 +3,14 @@ import styles from './LayoutSelector.module.scss';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { LayoutSelectorImages } from '../IProvisioningInterfaces';
 import LayoutImage from './LayoutImage/LayoutImage';
+import { ILayoutImage } from './LayoutImage/LayoutImage';
 
+export interface ILayoutSelector {
+    layoutImageCollection: ILayoutImage[];
+    onLayoutOptionClick:(event, key) => void;
+}
 
-const layoutSelector = (props) => {
+const layoutSelector = (props: ILayoutSelector) => {
     return (
         <div className={styles.LayoutSelector}>
             <div className={styles.LayoutSelectorHeader}>
@@ -18,9 +23,15 @@ const layoutSelector = (props) => {
             </div>
             <div className={styles.LayoutSelection}>
                 <div className={styles.LayoutContainer}>
-                    <LayoutImage imageURL={LayoutSelectorImages._Simple}/>
-                    <LayoutImage imageURL={LayoutSelectorImages._Social}/>
-                    <LayoutImage imageURL={LayoutSelectorImages._Traditional}/>
+                    {
+                        props.layoutImageCollection.map((el: ILayoutImage, index: number) =>
+                            <LayoutImage
+                                imageURL={el}
+                                key={index}
+                                onLayoutOptionClick={props.onLayoutOptionClick.bind(this, index)}
+                            />
+                        )
+                    }
                 </div>
             </div>
         </div>
