@@ -16,13 +16,11 @@ export interface ISiteClassification {
 
 
 const siteClassification = (props: ISiteClassification) => {
-    const inlineStyling : React.CSSProperties = {marginTop : "50%"};
-
 
     return (
         <div className={styles.SiteClassification}>
             <div className={styles.LeftLayoutHolder}>
-                <LeftLayout LayoutText="Privacy & Security" style={inlineStyling}/>
+                <LeftLayout LayoutText="Privacy & Security"/>
             </div>
             <div className={styles.RightLayoutHolder}>
                 <div className={styles.SiteClassificationSelection}>

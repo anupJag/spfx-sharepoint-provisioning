@@ -8,6 +8,8 @@
 
     .LeftLayoutHolder{
         width: 50%;
+        height: 100%;
+        display: inline-flex;
         @include ms-font-xl;
         @include ms-fontColor-white;
         background-color: $ms-color-themePrimary;

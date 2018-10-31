@@ -19,7 +19,7 @@ const siteTimeZone = (props: ISiteTimeZone) => {
     return (
         <div className={styles.SiteTimeZone}>
             <div className={styles.LeftLayoutHolder}>
-                <LeftLayout LayoutText="Which Time Zone would you like your site to be located?" />
+                <LeftLayout LayoutText="Which Time Zone will your site be located?" />
             </div>
             <div className={styles.RightLayoutHolder}>
                 <div className={styles.TimeZoneSelection}>

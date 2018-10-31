@@ -22,21 +22,23 @@ const siteName = (props: ISiteNameProps) => {
                 <LeftLayout LayoutText="What is the name of your site?" />
             </div>
             <div className={styles.RightLayoutHolder}>
-                <div className={styles.TextHolder}>
-                    <TextField
-                        underlined={true}
-                        placeholder="Give your site a name"
-                        onBlur={props.siteNameTextFieldOnBlur}
-                        value={props.siteName}
-                    />
-                </div>
-                <div className={styles.URLHolder}>
-                    <span>https://team.effem.com/sites/</span>
-                    <TextField
-                        underlined={true}
-                        className={styles.URLField}
-                        value={props.siteNameURL}
-                    />
+                <div className={styles.RightInnerHolder}>
+                    <div className={styles.TextHolder}>
+                        <TextField
+                            underlined={true}
+                            placeholder="Give your site a name"
+                            onBlur={props.siteNameTextFieldOnBlur}
+                            value={props.siteName}
+                        />
+                    </div>
+                    <div className={styles.URLHolder}>
+                        <span>https://team.effem.com/sites/</span>
+                        <TextField
+                            underlined={true}
+                            className={styles.URLField}
+                            value={props.siteNameURL}
+                        />
+                    </div>
                 </div>
                 <div className={styles.NavigationFooter}>
                     <Navigation
