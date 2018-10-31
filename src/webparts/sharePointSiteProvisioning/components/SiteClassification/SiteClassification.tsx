@@ -16,7 +16,7 @@ export interface ISiteClassification {
 
 
 const siteClassification = (props: ISiteClassification) => {
-    const inlineStyling : React.CSSProperties = {marginTop : "57%"};
+    const inlineStyling : React.CSSProperties = {marginTop : "50%"};
 
 
     return (

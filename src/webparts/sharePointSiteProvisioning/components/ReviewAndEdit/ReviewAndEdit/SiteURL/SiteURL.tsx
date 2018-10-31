@@ -3,25 +3,29 @@ import Aux from '../../../hoc/Auxilliary';
 import Label from '../../UIElements/Label/label';
 import inputStyle from '../../UIElements/InputText/InputText.module.scss';
 
-export interface ISiteName{
-    siteNameValue: string;
+export interface ISiteURL {
     className: any;
-    onSiteNameChange:(event: any) => void;
+    siteURLValue: string;
 }
 
-const siteName = (props : ISiteName) => {
+
+const siteURL = (props: ISiteURL) => {
+    const siteURLStyle: React.CSSProperties = {
+        fontSize: "14px"
+    };
+
     return (
         <Aux className={props.className}>
-            <Label>NAME</Label>
+            <Label>Site URL</Label>
             <input
                 type="text"
-                placeholder="Enter site Name"
-                value={props.siteNameValue}
+                placeholder="Site URL Not Configured"
+                value={props.siteURLValue}
                 className={inputStyle.InputText}
-                onChange={props.onSiteNameChange}
+                style={siteURLStyle}
             />
         </Aux>
     );
 };
 
-export default siteName;
+export default siteURL;

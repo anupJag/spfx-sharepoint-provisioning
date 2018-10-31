@@ -30,6 +30,7 @@ const siteFeatures = (props: ISiteFeatures) => {
                                     <SiteFeature
                                         key={el.FeatureID}
                                         labelName={el.FeatureName}
+                                        isSelected={el.IsSelected}
                                         onCheckboxChangeEvent={props.onCheckboxChangeEventHandler.bind(this, el.FeatureID)}
                                     />
                                 );

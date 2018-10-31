@@ -1,0 +1,71 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+
+.PreviewComponent{
+    position: relative;
+    display: inline-block;
+
+    .ImgPreview{
+        text-align: center;
+        margin: 5px 15px;
+        height: 80px;
+        width: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        border-left: 1px solid gray;
+        border-right: 1px solid gray;
+        border-top: 1px solid gray;
+        border-bottom: 1px solid gray;
+
+        .ImgClass{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .PreviewText{
+            background-image: url('https://static.parastorage.com/services/adi-web/2.183.0//images/intro/new/logo-placeholder-add.png');
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-origin: border-box;
+            background-size: contain;
+        }    
+    }
+
+    .FileInputHandler{
+        position: absolute;
+        top: calc(100% - 30px);
+        left: calc(100% - 46px);
+
+        .FileInputContainer{
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 0 20px 3px rgba(0,0,0,.15);
+
+            label{
+                background: transparent;
+                color: #00f;
+                font-size: 18px;
+                font-weight: bolder;
+                cursor: pointer;
+                align-self: center;
+
+
+                .FileInput{
+                    cursor: pointer
+                }  
+
+                input[type="file"] {
+                    display: none;
+                }
+            }
+        }
+    } 
+  
+}
+   

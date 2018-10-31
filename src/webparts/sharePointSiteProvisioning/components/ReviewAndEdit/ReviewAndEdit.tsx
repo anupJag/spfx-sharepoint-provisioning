@@ -10,6 +10,13 @@ export interface IReviewAndEdit {
     isForwardDisabled: boolean;
     onBackClicked: () => void;
     onForwadrdClicked: () => void;
+    handleImageChange: (event) => VoidFunction;
+    imagePreviewUrl: any;
+    siteNameValue: string;
+    onSiteNameChange: (event: any) => void;
+    siteClassificationValue: string;
+    siteURLValue: string;
+    timeZone: string;
 }
 
 const reviewAndEdit = (props: IReviewAndEdit) => {
@@ -20,7 +27,15 @@ const reviewAndEdit = (props: IReviewAndEdit) => {
             </div>
             <div className={styles.RightLayoutHolder}>
                 <div className={styles.ReviewEditContainer}>
-                    <ReviewEdit />
+                    <ReviewEdit
+                        handleImageChange={props.handleImageChange.bind(this)}
+                        imagePreviewUrl={props.imagePreviewUrl}
+                        siteNameValue={props.siteNameValue}
+                        onSiteNameChange={props.onSiteNameChange.bind(this)}
+                        siteClassificationValue={props.siteClassificationValue}
+                        siteURLValue={props.siteURLValue}
+                        timeZone={props.timeZone}
+                    />
                 </div>
                 <div className={styles.NavigationFooter}>
                     <Navigation

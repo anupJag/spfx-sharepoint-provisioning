@@ -13,6 +13,7 @@ export interface IProvisioningDetails {
 export interface IProvisioningFeature {
     FeatureName: string;
     FeatureID: string;
+    IsSelected: boolean;
 }
 
 export interface IProvisioningTimeZone {

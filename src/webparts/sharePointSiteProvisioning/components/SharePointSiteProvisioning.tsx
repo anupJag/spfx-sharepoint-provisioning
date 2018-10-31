@@ -42,6 +42,8 @@ export interface ISharePointSiteProvisioningState {
   siteTimeZones: IDropdownOption[];
   designPickerCollection: IDesign[];
   layoutImageURL: ILayoutImage[];
+  file: any;
+  imagePreviewUrl: any;
 }
 
 
@@ -53,7 +55,7 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
 
   private _peopleList;
   private _siteClassificationList: IDropdownOption[];
-  private _CompletionLabels : string[];
+  private _CompletionLabels: string[];
 
   /**
    *Default Constructor
@@ -88,15 +90,18 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
       availableFeatures: [
         {
           FeatureID: "XX-XX-XXX",
-          FeatureName: "Dashboard"
+          FeatureName: "Dashboard",
+          IsSelected: false
         },
         {
           FeatureID: "XX-YY-XXX",
-          FeatureName: "FAQ's"
+          FeatureName: "FAQ's",
+          IsSelected: false
         },
         {
           FeatureID: "XX-YY-YXX",
-          FeatureName: "Charts"
+          FeatureName: "Charts",
+          IsSelected: false
         }
       ],
       siteTimeZones: [],
@@ -159,21 +164,23 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
       ],
       layoutImageURL: [
         {
-          imageURL: "https://publiccdn.sharepointonline.com/myadmo365.sharepoint.com/CDN/ProvisioningImages/Simple.PNG",
+          imageURL: "https://team.effem.com/sites/spfxdev/SiteAssets/ProvisioningImages/Simple.PNG",
           isSelected: false,
           layoutName: "Simple"
         },
         {
-          imageURL: "https://publiccdn.sharepointonline.com/myadmo365.sharepoint.com/CDN/ProvisioningImages/Social.PNG",
+          imageURL: "https://team.effem.com/sites/spfxdev/SiteAssets/ProvisioningImages/Social.PNG",
           isSelected: false,
           layoutName: "Social"
         },
         {
-          imageURL: "https://publiccdn.sharepointonline.com/myadmo365.sharepoint.com/CDN/ProvisioningImages/Traditional.PNG",
+          imageURL: "https://team.effem.com/sites/spfxdev/SiteAssets/ProvisioningImages/Traditional.PNG",
           isSelected: false,
           layoutName: "Traditional"
         }
-      ]
+      ],
+      file: '',
+      imagePreviewUrl: ''
     };
   }
 
@@ -291,10 +298,11 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
     });
   }
 
-  protected onFeatureChangeEventHandler = (key: any, ev: React.FormEvent<HTMLElement>, isChecked: boolean, ): void => {
+  protected onFeatureChangeEventHandler = (key: any, ev: React.FormEvent<HTMLElement>, isChecked: boolean): void => {
     let tempProvisioningDetails: IProvisioningDetails = { ...this.state.provisioningDetails };
     let tempFeatureCollection: IProvisioningFeature[] = [...((this.state.provisioningDetails.SiteFeatures && this.state.provisioningDetails.SiteFeatures.length > 0) ? this.state.provisioningDetails.SiteFeatures : [])];
     const { availableFeatures } = this.state;
+    let tempAvailableFeature: IProvisioningFeature[] = [...this.state.availableFeatures];
     //Addition of functionality
     if (isChecked === true) {
       let conditionCheck = tempFeatureCollection.filter(el => el.FeatureID === key);
@@ -307,9 +315,17 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
         return el.FeatureID === key;
       }), 1);
     }
+
+    for (let i = 0; i < tempAvailableFeature.length; i++) {
+      if(tempAvailableFeature[i]["FeatureID"] === key){
+        tempAvailableFeature[i]["IsSelected"] = isChecked;
+      }
+    }
+
     tempProvisioningDetails.SiteFeatures = (tempFeatureCollection && tempFeatureCollection.length > 0 ? tempFeatureCollection : []);
     this.setState({
-      provisioningDetails: tempProvisioningDetails
+      provisioningDetails: tempProvisioningDetails,
+      availableFeatures: tempAvailableFeature
     });
   }
 
@@ -321,6 +337,16 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
     tempProvisioningDetails["SiteName"] = tempSiteName.trim();
     tempProvisioningDetails["SiteURL"] = siteURL.trim();
 
+    this.setState({
+      provisioningDetails: tempProvisioningDetails
+    });
+  }
+
+  protected onSiteNameChangeHandler = (event: any): void => {
+    debugger;
+    let tempSiteName: string = escape(event.target.value);
+    let tempProvisioningDetails: IProvisioningDetails = { ...this.state.provisioningDetails };
+    tempProvisioningDetails["SiteName"] = tempSiteName;
     this.setState({
       provisioningDetails: tempProvisioningDetails
     });
@@ -479,10 +505,45 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
     console.log("Page Rendering Started");
 
     await setTimeout(() => this.setState({
-      currentPage : 9
+      currentPage: 9
     }), 3000);
 
     console.log("Page Rendering completed");
+  }
+
+  private handleImageChangeHandler = (event): void => {
+    let reader = new FileReader();
+    let file = event.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        file: file,
+        imagePreviewUrl: reader.result
+      });
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  private getTimeZoneValue = (): string => {
+
+    let tempProvisioningDetails: IProvisioningDetails = { ...this.state.provisioningDetails };
+    if (!(tempProvisioningDetails && tempProvisioningDetails.SiteTimeZone)) {
+      return null;
+    }
+
+    let timeZoneCollection: IDropdownOption[];
+    if (!(this.state.siteTimeZones && this.state.siteTimeZones.length > 0)) {
+      return null;
+    }
+    timeZoneCollection = [...this.state.siteTimeZones];
+
+    let tempColl = findIndex(timeZoneCollection, (el) => {
+      return el.key === tempProvisioningDetails.SiteTimeZone;
+    });
+
+    return timeZoneCollection[tempColl]["text"];
+
   }
 
   public render(): React.ReactElement<ISharePointSiteProvisioningProps> {
@@ -576,6 +637,13 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
             isForwardDisabled={this.state.isForwardButtonDisabled}
             onBackClicked={this.isBackButtonClicked.bind(this)}
             onForwadrdClicked={this.isForwardButtonClicked.bind(this)}
+            imagePreviewUrl={this.state.imagePreviewUrl}
+            handleImageChange={this.handleImageChangeHandler.bind(this)}
+            siteNameValue={this.state.provisioningDetails ? this.state.provisioningDetails.SiteName ? this.state.provisioningDetails.SiteName : null : null}
+            onSiteNameChange={this.onSiteNameChangeHandler.bind(this)}
+            siteClassificationValue={this.state.provisioningDetails ? this.state.provisioningDetails.SiteClassification ? this.state.provisioningDetails.SiteClassification : null : null}
+            siteURLValue={this.state.provisioningDetails ? this.state.provisioningDetails.SiteURL ? `https://team.effem.com/sites/${this.state.provisioningDetails.SiteURL}` : null : null}
+            timeZone={this.getTimeZoneValue()}
           />;
         break;
 
@@ -598,13 +666,13 @@ export default class SharePointSiteProvisioning extends React.Component<ISharePo
             onLayoutOptionClick={this.onLayoutOptionClickHandler.bind(this)}
           />;
         break;
-      
+
       case 9:
-        pageToBeRendered=
-          <SiteCreationStatus 
+        pageToBeRendered =
+          <SiteCreationStatus
             statusLabel={this._CompletionLabels}
           />;
-      break;
+        break;
     }
 
 
