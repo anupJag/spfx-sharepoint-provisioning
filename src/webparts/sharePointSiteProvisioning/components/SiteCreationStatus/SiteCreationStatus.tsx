@@ -61,14 +61,26 @@ export default class SiteCreationStatus extends React.Component<ISiteCreationSta
     }
 
     public render(): React.ReactElement<ISiteCreationStatusProps> {
+        const siteCreationStatus : JSX.Element = (this.state.percentCompleted === 1.0) ? 
+            <div className={styles.SiteCreationInfo}>
+                <div className={styles.Header}>Your site is now ready!</div>
+                <div className={styles.SubHeader}>Hang on we will re-direct you</div>
+            </div> 
+            : 
+            null;
+        
         return (
             <div className={styles.SiteCreationStatus}>
+                <div className={styles.SiteCreationInfo}>
+                    <div className={styles.Header}>Please wait while we build your site</div>
+                </div>
                 <div className={styles.SiteCreationContainer}>
                     <ProgressIndicator
                         label={this.state.percentLabel}
                         percentComplete={this.state.percentCompleted}
                     />
                 </div>
+                {siteCreationStatus}
             </div>
         );
     }

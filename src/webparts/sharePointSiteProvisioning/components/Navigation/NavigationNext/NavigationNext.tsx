@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { IconButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
-import styles from './Navigation.module.scss';
+import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import styles from './NavigationNext.module.scss';
 
 export interface INavigationNextProps{
     isDisabled : boolean;
@@ -9,11 +9,12 @@ export interface INavigationNextProps{
 
 const navigationNext = (props : INavigationNextProps) => {
     return(
-        <IconButton 
+        <DefaultButton 
             disabled={props.isDisabled}
-            iconProps={{iconName : "Forward"}}
+            primary={true}
+            text="Next"
             onClick={props.onForwadrdClicked}
-            className={styles.Navigation}
+            className={styles.NavigationNext}
         />
     );
 };

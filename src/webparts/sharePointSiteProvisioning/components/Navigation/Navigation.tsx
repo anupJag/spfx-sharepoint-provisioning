@@ -1,6 +1,7 @@
 import * as React from 'react';
-import Back from './NavigationBack';
-import Forward from './NavigationNext';
+import Back from './NavigationBack/NavigationBack';
+import Forward from './NavigationNext/NavigationNext';
+import styles from './Navigation.module.scss';
 
 export interface INavigationProps {
     isBackDisabled: boolean;
@@ -11,7 +12,7 @@ export interface INavigationProps {
 
 const navigation = (props: INavigationProps) => {
     return (
-        <footer>
+        <footer className={styles.Navigation}>
             <Back
                 isDisabled={props.isBackDisabled}
                 onBackClicked={props.onBackClicked}

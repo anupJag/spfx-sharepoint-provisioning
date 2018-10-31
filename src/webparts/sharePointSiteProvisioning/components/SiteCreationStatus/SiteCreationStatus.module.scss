@@ -6,15 +6,40 @@
     height: 435px;
     box-sizing: border-box;
     font-family: 'Roboto';
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 
     .SiteCreationContainer{
         width: 80%;
-        padding-top: 25%;
-        margin-left: 72px;
+        padding-top: 1%;
+        margin-left: 85px;
 
         div[class^="ms-ProgressIndicator-itemName itemName-"]{
             font-weight: bolder;
             font-size: 18px;
+        }
+    }
+
+    .SiteCreationInfo{
+        width: inherit;
+        height: 30%;
+        text-align: center;
+        padding-top: 3em;
+
+        .Header{
+            font-family: 'Roboto';
+            font-size: 24px;
+            font-weight: bolder;
+            color: #000;
+        }
+
+        .SubHeader{
+            font-family: 'Roboto';
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 1.62;
+            letter-spacing: .25px;
         }
     }
 }
